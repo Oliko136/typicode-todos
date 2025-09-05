@@ -21,4 +21,8 @@ const addTodoToDOM = (todo) => {
     document.getElementById('todo-list').appendChild(div);
 }
 
-getTodos();
+const init = () => {
+    document.addEventListener('DOMContentLoaded', getTodos);
+}
+
+init();
