@@ -14,8 +14,11 @@ const getTodos = () => {
 
 const addTodoToDOM = (todo) => {
     const div = document.createElement('div');
+    
+    div.classList.add('todo');
 
     div.appendChild(document.createTextNode(todo.title));
+
     div.setAttribute('data-id', todo.id);
 
     if (todo.completed) {
@@ -48,9 +51,31 @@ const createTodo = (e) => {
 
 }
 
+// PUT Request
+const updateTodo = (id, completed) => {
+    fetch(`${apiUrl}/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ completed }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(res => res.json())
+        .then(data => console.log(data));
+}
+
+const toggleCompleted = (e) => {
+    if (e.target.classList.contains('todo')) {
+        e.target.classList.toggle('done');
+
+        updateTodo(e.target.dataset.id, e.target.classList.contains('done'));
+    }
+}
+
 const init = () => {
     document.addEventListener('DOMContentLoaded', getTodos);
     todoForm.addEventListener('submit', createTodo);
+    todoList.addEventListener('click', toggleCompleted);
 }
 
 init();
