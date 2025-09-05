@@ -1,5 +1,9 @@
 const apiUrl = 'https://jsonplaceholder.typicode.com/todos';
 
+const todoForm = document.getElementById('todo-form');
+const todoList = document.getElementById('todo-list');
+
+// GET Request
 const getTodos = () => {
     fetch(apiUrl + '?_limit=5')
         .then(res => res.json())
@@ -18,11 +22,35 @@ const addTodoToDOM = (todo) => {
         div.classList.add('done');
     }
 
-    document.getElementById('todo-list').appendChild(div);
+    todoList.appendChild(div);
+}
+
+// POST Request
+const createTodo = (e) => {
+    e.preventDefault();
+
+    const todoTitle = e.target.firstElementChild.value;
+
+    const newTodo = {
+        title: todoTitle,
+        completed: false
+    }
+
+    fetch(apiUrl, {
+        method: 'POST',
+        body: JSON.stringify(newTodo),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(res => res.json())
+        .then(data => addTodoToDOM(data));
+
 }
 
 const init = () => {
     document.addEventListener('DOMContentLoaded', getTodos);
+    todoForm.addEventListener('submit', createTodo);
 }
 
 init();
